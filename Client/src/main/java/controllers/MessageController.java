@@ -1,15 +1,11 @@
 package controllers;
 
-import java.io.IOException;
-import java.lang.runtime.ObjectMethods;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import models.Id;
 import models.Message;
 import org.json.simple.JSONArray;
@@ -43,8 +39,28 @@ public class MessageController {
         }
     }
 
-    public ArrayList<Message> getMessages() throws IOException {
-        return null;
+    public ArrayList<Message> getMessages() {
+        //convert HashSet message seen to an array
+        Message[] array = messagesSeen.toArray(new Message[0]);
+        //create new array list to hold the Message objects from Message[] array (mutable)
+        ArrayList<Message> messages = new ArrayList<>();
+        for (int i = 0; i < array.length; i++) {
+            messages.add(array[i]);
+        }
+        // New ArrayList copy to sort the values of messages ArrayList by timestamp using stream sort
+        //this gives me all messages in order from oldest to most recent
+        ArrayList<Message> copy = (ArrayList<Message>) messages.stream()
+                .sorted(Comparator.comparing(Message::getTimestamp)).collect(Collectors.toList());
+
+        //create new ArrayList to collect only the most recent 20 objects from ArrayList copy
+        //iterates through copy starting at the last index and stopping before the first index to only get the most recent 20;
+        ArrayList<Message> mostRecent = new ArrayList<>();
+        for (int i = copy.size()-1; i > copy.size()-21; i--) {
+            mostRecent.add(copy.get(i));
+        }
+
+        mostRecent.forEach(System.out::println);
+        return mostRecent;
     }
 
     public ArrayList<Message> getMessagesForId(Id Id) {
@@ -62,5 +78,7 @@ public class MessageController {
     public Message postMessage(Id myId, Id toId, Message msg) {
         return null;
     }
- 
+
+
+
 }

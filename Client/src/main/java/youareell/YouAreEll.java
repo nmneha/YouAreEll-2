@@ -13,9 +13,9 @@ public class YouAreEll {
     }
 
     public static void main(String[] args) throws IOException {
-//            ServerController serverController = ServerController.shared();
-//            serverController.idGet();
-//            serverController.messagesGet();
+            ServerController serverController = ServerController.shared();
+            serverController.idGet();
+        System.out.println(serverController.messagesGet());
             MessageController messageController = MessageController.shared();
             System.out.println(messageController.messagesSeen);
 
