@@ -23,15 +23,6 @@ public class YouAreEll {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-//            ServerController serverController = ServerController.shared();
-//            serverController.idGet();
-//            System.out.println(serverController.messagesGet());
-//
-//            MessageController messageController = MessageController.shared();
-//            System.out.println(messageController.messagesSeen);
-//
-//            IdController idController = IdController.shared();
-//            System.out.println(idController.allIds);
 
         // hmm: is this Dependency Injection?
         YouAreEll urlhandler = new YouAreEll(
@@ -73,7 +64,7 @@ public class YouAreEll {
         return show;
     }
 
-    private String post_Ids() {
+    private String post_Ids() throws IOException {
         IdController idController = new IdController();
         idController.postId(new Id());
         return "New Id Created";

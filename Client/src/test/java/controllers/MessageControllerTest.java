@@ -1,10 +1,12 @@
 package controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import junit.framework.TestCase;
 import models.Id;
 import models.Message;
 import org.json.simple.JSONArray;
+import org.junit.Assert;
 
 import java.io.DataInput;
 import java.io.IOException;
@@ -15,19 +17,33 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 public class MessageControllerTest extends TestCase {
-    ServerController serverController = ServerController.shared();
+
+    MessageController messages = new MessageController();
+
+    public MessageControllerTest() throws JsonProcessingException {
+    }
 
     public void testGetMessages() throws IOException {
-
+        ArrayList<Message> actual = messages.getMessages();
+        Assert.assertTrue(actual.size() != 0);
     }
 
     public void testGetMessagesForId() {
+        Id id = new Id("blossom", "bubbles");
+        ArrayList<Message> actual = messages.getMessagesForId(id);
+        Assert.assertTrue(actual.size() == 0);
     }
 
     public void testGetMessageForSequence() {
+        Message actual = messages.getMessageForSequence("3f88230afa5414d79248030a3131c9d8ae6c6b7c");
+        Assert.assertTrue(actual == null);
     }
 
     public void testGetMessagesFromFriend() {
+        Id id = new Id("blossom", "bubbles");
+        Id friend = new Id("caterpie", "weedle");
+        ArrayList<Message> actual = messages.getMessagesFromFriend(id, friend );
+        Assert.assertTrue(actual.size() == 0);
     }
 
     public void testPostMessage() {

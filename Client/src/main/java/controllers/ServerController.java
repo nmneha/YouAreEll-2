@@ -2,6 +2,7 @@ package controllers;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import models.Id;
 import org.json.simple.JSONArray;
@@ -33,7 +34,7 @@ public class ServerController<JsonString> {
         return svr;
     }
 
-    public JSONArray idGet() throws IOException, InterruptedException {
+    public JSONArray idGet() {
         BufferedReader reader;
         JSONParser jsonParser = new JSONParser();
         JSONArray ids = null;
@@ -128,7 +129,7 @@ public class ServerController<JsonString> {
     public JsonString idPost(Id id) throws IOException {
         StringBuilder response = null;
         try {
-            URL url = new URL(rootURL + "/messages");
+            URL url = new URL(rootURL + "/ids");
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setConnectTimeout(5000);
@@ -144,21 +145,23 @@ public class ServerController<JsonString> {
             int status = connection.getResponseCode();
             System.out.println(status);
 
-            try (BufferedReader br = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
-                response = new StringBuilder();
-                String responseLine = null;
-                while ((responseLine = br.readLine()) != null) {
-                    response.append(responseLine.trim());
-                }
-                System.out.println(response);
-            }
+//            try (BufferedReader br = new BufferedReader(
+//                    new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+//                response = new StringBuilder();
+//                String responseLine = null;
+//                while ((responseLine = br.readLine()) != null) {
+//                    response.append(responseLine.trim());
+//                }
+//                System.out.println(response);
+//            }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
         return (JsonString) response;
     }
+
+//    public JsonString idPut (JsonTypeInfo.Id) {}
 }
 
 // ServerController.shared.doGet()

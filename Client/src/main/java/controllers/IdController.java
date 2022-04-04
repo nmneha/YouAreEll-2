@@ -29,7 +29,7 @@ public class IdController {
         return ids;
     }
 
-    public Id postId(Id id) {
+    public Id postId(Id id) throws IOException {
         id = new Id("blossom", "bubbles");
         serverController.idPost(id);
         // create json from id

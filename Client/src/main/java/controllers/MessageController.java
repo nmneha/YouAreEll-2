@@ -70,7 +70,7 @@ public class MessageController {
                 mostRecent.add(m);
             }
         }
-        return messages;
+        return mostRecent;
     }
 
     public Message getMessageForSequence(String seq) {
@@ -102,7 +102,7 @@ public class MessageController {
                 mostRecent.add(m);
             }
         }
-        return messages;
+        return mostRecent;
     }
 
     public Message postMessage(Id myId, Id toId, Message msg) {
