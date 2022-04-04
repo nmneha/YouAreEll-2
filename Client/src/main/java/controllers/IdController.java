@@ -4,13 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import models.Id;
-import models.Message;
-import org.json.simple.JSONArray;
 
 public class IdController {
     public HashMap<String, Id> allIds = new HashMap<>();
@@ -19,7 +16,7 @@ public class IdController {
 
     public IdController() {}
 
-    public ArrayList<Id> getIds() throws IOException, InterruptedException {
+    public ArrayList<Id> getIds() throws JsonProcessingException {
         String getIds = String.valueOf(serverController.idGet());
         ObjectMapper objectMapper = new ObjectMapper();
         ArrayList<Id> ids = objectMapper.readValue(getIds, new TypeReference<>() {});
@@ -29,18 +26,15 @@ public class IdController {
         return ids;
     }
 
-    public Id postId(Id id) throws IOException {
-        id = new Id("blossom", "bubbles");
+    public void postId(Id id) throws IOException {
         serverController.idPost(id);
         // create json from id
         // call server, get json result Or error
         // result json to Id obj
-
-        return null;
     }
 
     public Id putId(Id id) {
         return null;
     }
- 
+
 }

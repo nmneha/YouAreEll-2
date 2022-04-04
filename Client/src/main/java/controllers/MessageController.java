@@ -66,9 +66,7 @@ public class MessageController {
                 mostRecent.add(copy.get(i));
             }
         } else {
-            for (Message m : copy) {
-                mostRecent.add(m);
-            }
+            mostRecent.addAll(copy);
         }
         return mostRecent;
     }
