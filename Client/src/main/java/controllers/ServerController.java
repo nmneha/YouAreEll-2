@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import models.Id;
+import models.Message;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -161,7 +162,38 @@ public class ServerController<JsonString> {
         return (JsonString) response;
     }
 
+    public void messagePost(Message m, String sourceId) throws JsonProcessingException {
+        StringBuilder response = null;
+        try {
+            URL url = new URL(rootURL + "/ids/" + sourceId + "/messages");
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(5000);
+            connection.setRequestProperty("Message", "application/json; utf-8");
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setDoOutput(true);
+            ObjectMapper mapper = new ObjectMapper();
+            String out = mapper.writeValueAsString(m);
+            OutputStream stream = connection.getOutputStream();
+            byte[] input = out.getBytes(StandardCharsets.UTF_8);
+            stream.write(input, 0, input.length);
+            int status = connection.getResponseCode();
+            System.out.println(status);
+        } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
 //    public JsonString idPut (JsonTypeInfo.Id) {}
+    }
+
+
 }
 
 // ServerController.shared.doGet()

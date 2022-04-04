@@ -37,7 +37,7 @@ public class YouAreEll {
     private String MakeURLCall(String source) throws IOException, InterruptedException {
         if(source.equals("/ids")) {
             return get_ids();
-        } else if (source.equals("messages")) {
+        } else if (source.equals("/messages")) {
             return get_messages();
         } else {
             return post_Ids();
@@ -68,6 +68,13 @@ public class YouAreEll {
         IdController idController = new IdController();
         idController.postId(new Id());
         return "New Id Created";
+//        return MakeURLCall("/post", "GET", "");
+    }
+
+    private String post_Messages(String id) throws IOException {
+        MessageController messageController = new MessageController();
+        messageController.postMessage(new Message(), id);
+        return "New Message Sent";
 //        return MakeURLCall("/post", "GET", "");
     }
 

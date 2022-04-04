@@ -1,5 +1,6 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /*
@@ -22,24 +23,21 @@ public class Message implements Comparable {
     private String toId = "";
     @JsonProperty("fromid")
     private String fromId = "";
-    @JsonProperty("timestamp")
     private String timestamp = "";
     @JsonProperty("sequence")
     private String seqId = "";
 
-    public Message (String message, String fromId, String toId, String timeStamp, String seqId) {
+    public Message (String fromId, String toId, String message) {
         this.message = message;
         this.fromId = fromId;
         this.toId = toId;
-        this.timestamp = timeStamp;
-        this.seqId = seqId;
     }
 
-    public Message (String message, String fromId) {
-        this.message = message;
-        this.fromId = fromId;
-        this.toId = "";
-    }
+//    public Message (String message, String fromId) {
+//        this.message = message;
+//        this.fromId = fromId;
+//        this.toId = "";
+//    }
 
     public Message() {
     }
@@ -81,8 +79,14 @@ public class Message implements Comparable {
         this.fromId = fromId;
     }
 
+    @JsonIgnore
     public String getTimestamp() {
         return timestamp;
+    }
+
+    @JsonProperty
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getSeqId() {

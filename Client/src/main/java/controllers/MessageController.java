@@ -31,13 +31,14 @@ public class MessageController {
 //    }
 
     public MessageController() throws JsonProcessingException {
-        String messageString = serverController.messagesGet().toString();
-        ObjectMapper objectMapper = new ObjectMapper();
-        messagesSeen = objectMapper.readValue(messageString, new TypeReference<>() {});
+//        String messageString = serverController.messagesGet().toString();
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        messagesSeen = objectMapper.readValue(messageString, new TypeReference<>() {});
     }
 
 
-    public ArrayList<Message> getMessages() {
+    public ArrayList<Message> getMessages() throws JsonProcessingException {
+        update();
         ArrayList<Message> messages = new ArrayList<>();
         for (Message i : messagesSeen) {
             messages.add(i);
@@ -48,10 +49,12 @@ public class MessageController {
         for (int i = copy.size()-1; i > copy.size()-21; i--) {
             mostRecent.add(copy.get(i));
         }
+        mostRecent.forEach(System.out::println);
         return mostRecent;
     }
 
-    public ArrayList<Message> getMessagesForId(Id Id) {
+    public ArrayList<Message> getMessagesForId(Id Id) throws JsonProcessingException {
+        update();
       ArrayList<Message> messages = new ArrayList<>();
         for (Message m : messagesSeen) {
             if (m.getFromId().equals(Id.getGithub())) {
@@ -71,7 +74,8 @@ public class MessageController {
         return mostRecent;
     }
 
-    public Message getMessageForSequence(String seq) {
+    public Message getMessageForSequence(String seq) throws JsonProcessingException {
+        update();
         for (Message m : messagesSeen) {
             if (m.getSeqId().equals(seq)) {
                 return m;
@@ -80,7 +84,8 @@ public class MessageController {
         return null;
     }
 
-    public ArrayList<Message> getMessagesFromFriend(Id myId, Id friendId) {
+    public ArrayList<Message> getMessagesFromFriend(Id myId, Id friendId) throws JsonProcessingException {
+        update();
         ArrayList<Message> messages = new ArrayList<>();
         for (Message m : messagesSeen) {
             if (m.getFromId().equals(friendId.getGithub()) && m.getToId().equals(myId.getGithub())) {
@@ -103,8 +108,15 @@ public class MessageController {
         return mostRecent;
     }
 
-    public Message postMessage(Id myId, Id toId, Message msg) {
-        return null;
+    public void postMessage( Message m, String sourceidUrl) throws JsonProcessingException {
+        serverController.messagePost(m, sourceidUrl);
+    }
+
+
+    public void update() throws JsonProcessingException {
+        String messageString = serverController.messagesGet().toString();
+        ObjectMapper objectMapper = new ObjectMapper();
+        messagesSeen = objectMapper.readValue(messageString, new TypeReference<>() {});
     }
 
 
