@@ -2,6 +2,8 @@ package controllers;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import models.Id;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -13,11 +15,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
 
 public class ServerController<JsonString> {
     private String rootURL = "http://zipcode.rocks:8085";
     HttpURLConnection connection;
+
 
     private static ServerController svr = new ServerController();
 
@@ -27,8 +33,7 @@ public class ServerController<JsonString> {
         return svr;
     }
 
-
-    public JSONArray idGet() {
+    public JSONArray idGet() throws IOException, InterruptedException {
         BufferedReader reader;
         JSONParser jsonParser = new JSONParser();
         JSONArray ids = null;
@@ -62,9 +67,9 @@ public class ServerController<JsonString> {
             connection.disconnect();
         }
         return ids;
-            // url -> /ids/
-            // send the server a get with url
-            // return json from server
+//             url -> /ids/
+//             send the server a get with url
+//             return json from server
         }
 
 
@@ -120,6 +125,8 @@ public class ServerController<JsonString> {
     }
 
 
+    public void idPost(Id id) {
     }
+}
 
 // ServerController.shared.doGet()
