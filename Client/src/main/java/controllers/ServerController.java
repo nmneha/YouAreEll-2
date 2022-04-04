@@ -13,12 +13,11 @@ import javax.swing.text.html.parser.Parser;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
+import java.io.OutputStream;
+import java.net.*;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
+import java.nio.charset.StandardCharsets;
 
 public class ServerController<JsonString> {
     private String rootURL = "http://zipcode.rocks:8085";
@@ -27,7 +26,8 @@ public class ServerController<JsonString> {
 
     private static ServerController svr = new ServerController();
 
-    private ServerController() {}
+    private ServerController() {
+    }
 
     public static ServerController shared() {
         return svr;
@@ -70,7 +70,7 @@ public class ServerController<JsonString> {
 //             url -> /ids/
 //             send the server a get with url
 //             return json from server
-        }
+    }
 
 
 //    public JsonString idPost(JsonTypeInfo.Id) {
@@ -125,7 +125,39 @@ public class ServerController<JsonString> {
     }
 
 
-    public void idPost(Id id) {
+    public JsonString idPost(Id id) throws IOException {
+        StringBuilder response = null;
+        try {
+            URL url = new URL(rootURL + "/messages");
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(5000);
+            connection.setRequestProperty("Id", "application/json; utf-8");
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setDoOutput(true);
+            ObjectMapper mapper = new ObjectMapper();
+            String out = mapper.writeValueAsString(id);
+            OutputStream stream = connection.getOutputStream();
+            byte[] input = out.getBytes(StandardCharsets.UTF_8);
+            stream.write(input, 0, input.length);
+            int status = connection.getResponseCode();
+            System.out.println(status);
+
+            try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+                response = new StringBuilder();
+                String responseLine = null;
+                while ((responseLine = br.readLine()) != null) {
+                    response.append(responseLine.trim());
+                }
+                System.out.println(response);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return (JsonString) response;
     }
 }
 

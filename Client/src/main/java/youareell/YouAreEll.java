@@ -43,7 +43,7 @@ public class YouAreEll {
         System.out.println(urlhandler.MakeURLCall("/post"));
     }
 
-    private String MakeURLCall(String source) throws JsonProcessingException {
+    private String MakeURLCall(String source) throws IOException, InterruptedException {
         if(source.equals("/ids")) {
             return get_ids();
         } else if (source.equals("messages")) {
